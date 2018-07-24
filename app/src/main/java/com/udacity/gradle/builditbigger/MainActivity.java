@@ -6,13 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lexoid.jokeactivity.JokeActivity;
-import com.lexoid.jokeslib.JokesLib;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements JokesAsyncTask.JokesListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +41,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        JokesLib jokesLib = new JokesLib();
-        String joke = jokesLib.getJoke();
+        JokesAsyncTask jokesAsyncTask = new JokesAsyncTask(this);
+        jokesAsyncTask.execute();
+    }
 
+    @Override
+    public void onResponse(String joke) {
         Intent intent = new Intent(this, JokeActivity.class);
         intent.putExtra(JokeActivity.JOKE_EXTRA, joke);
 
         startActivity(intent);
     }
-
-
 }
